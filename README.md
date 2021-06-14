@@ -7,7 +7,9 @@ A versioning tool.
 
 ## TODO
 
-- [ ] Implement the init task
-- [ ] Implement bump major|minor|patch
-- [ ] Implement bump prerelease|build
+- [x] Implement the init task
+- [ ] Implement bump major|minor|patch task
+- [ ] Implement bump prerelease|build task
+- [ ] Implement tag task
+- [ ] Implement resync task
 
