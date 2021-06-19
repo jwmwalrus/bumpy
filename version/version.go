@@ -40,7 +40,6 @@ func (v *Version) LoadFrom(path string) (err error) {
 		return
 	}
 
-	// var jsonFile *os.File
 	jsonFile, err := os.Open(file)
 	if err != nil {
 		return
