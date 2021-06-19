@@ -57,6 +57,21 @@ func (v *Version) LoadFrom(path string) (err error) {
 	return
 }
 
+// NoPrefix returns the version string, without a "v" prefix
+func (v *Version) NoPrefix() (out string) {
+	out = strconv.Itoa(v.Major) + "." + strconv.Itoa(v.Minor) + "." + strconv.Itoa(v.Patch)
+
+	if v.Pre != "" {
+		out += "-" + v.Pre
+	}
+
+	if v.Build != "" {
+		out += "+" + v.Build
+	}
+
+	return
+}
+
 // Parse parses a version string into its fields
 func (v *Version) Parse(s string) (err error) {
 	var core, pre, build []byte
@@ -135,15 +150,26 @@ func (v *Version) SaveTo(path string) (err error) {
 
 // String returns the version string
 func (v *Version) String() (out string) {
-	out = "v" + strconv.Itoa(v.Major) + "." + strconv.Itoa(v.Minor) + "." + strconv.Itoa(v.Patch)
+	out = "v" + v.NoPrefix()
+	return
+}
 
-	if v.Pre != "" {
-		out += "-" + v.Pre
+// Equals checks if two versions are identical
+func (v *Version) Equals(r Version) bool {
+	return v.Major == r.Major &&
+		v.Minor == r.Minor &&
+		v.Patch == r.Patch &&
+		v.Pre == r.Pre &&
+		v.Build == r.Build
+}
+
+// EqualsString checks if version is identical to string
+func (v *Version) EqualsString(s string) (ok bool, err error) {
+	var r Version
+	if err = r.Parse(s); err != nil {
+		return
 	}
 
-	if v.Build != "" {
-		out += "+" + v.Build
-	}
-
+	ok = v.Equals(r)
 	return
 }
