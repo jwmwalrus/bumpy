@@ -1,24 +1,21 @@
 package task
 
 import (
-	"errors"
 	"fmt"
-	"os"
-	"path/filepath"
 
 	"github.com/jwmwalrus/bumpy-ride/internal/git"
 	"github.com/jwmwalrus/bumpy-ride/version"
 	"github.com/urfave/cli/v2"
 )
 
-// Init creates an initial version file
-func Init() *cli.Command {
+// Sync synchronizes version file with latest tag
+func Sync() *cli.Command {
 	return &cli.Command{
-		Name:            "init",
+		Name:            "sync",
 		Category:        "control",
-		Usage:           "init",
-		UsageText:       "init - creates an initial version file",
-		Description:     "Creates an initial version file, using git tags as a hint",
+		Usage:           "sync",
+		UsageText:       "sync - synchronizes version file",
+		Description:     "Synchronizes version file with latest tag",
 		SkipFlagParsing: false,
 		HideHelp:        false,
 		Hidden:          false,
@@ -27,8 +24,12 @@ func Init() *cli.Command {
 			// TODO: complete
 			fmt.Fprintf(c.App.Writer, "--better\n")
 		},
-		Action: initAction,
+		Action: syncAction,
 		Flags: []cli.Flag{
+			&cli.StringFlag{
+				Name:  "npm-prefix",
+				Usage: "Update package.json at the given location",
+			},
 			&cli.BoolFlag{
 				Name:  "no-fetch",
 				Usage: "Do no perform a `git fetch` operation",
@@ -42,19 +43,10 @@ func Init() *cli.Command {
 	}
 }
 
-func initAction(c *cli.Context) (err error) {
-	file := filepath.Join(".", version.VersionFile)
-	_, err = os.Stat(file)
-	if !os.IsNotExist(err) {
-		err = errors.New("Repository is already initialized, isn't it?")
-		return
-	}
-
+func syncAction(c *cli.Context) (err error) {
 	v := version.Version{}
 	tag := ""
 	if tag, err = git.GetLatestTag(c.Bool("no-fetch")); err != nil {
-		err = v.Save()
-		fmt.Println("Done!")
 		return
 	}
 
@@ -65,6 +57,8 @@ func initAction(c *cli.Context) (err error) {
 	if err = v.Save(); err != nil {
 		return
 	}
+
+	// TODO: update package.json
 
 	fmt.Println("Done!")
 	return
