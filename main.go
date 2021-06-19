@@ -39,5 +39,8 @@ func main() {
 func getTasks() []*cli.Command {
 	return []*cli.Command{
 		task.Init(),
+		task.Bump(),
+		task.Sync(),
+		task.Tag(),
 	}
 }
