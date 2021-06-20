@@ -42,5 +42,6 @@ func getTasks() []*cli.Command {
 		task.Bump(),
 		task.Sync(),
 		task.Tag(),
+		task.Version(),
 	}
 }
