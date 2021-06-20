@@ -7,6 +7,20 @@ Format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 This project uses [semantic versions](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## [0.50.1] 2021-06-20
+
+Fixes and improvements
+
+### Fixed
+
+* Bump error after init
+
+### Added
+
+* `--no-commit` flag to the bump command
+
 ## [0.50.0] 2021-06-19
 
 Implement sync, bump and tag
