@@ -17,24 +17,21 @@ import (
 func Tag() *cli.Command {
 	return &cli.Command{
 		Name:            "tag",
-		Category:        "control",
-		Usage:           "tag",
-		UsageText:       "tag - tags ChangeLog.md",
-		Description:     "Commits ChangeLog.md and tags it with the latest version",
+		Aliases:         []string{"t"},
+		Category:        "Git",
+		Usage:           "Tags the ChangeLog",
+		UsageText:       "tag [--changelog-name NAME]",
+		Description:     "Commits ChangeLog.md and tags the commit with the latest version",
 		SkipFlagParsing: false,
 		HideHelp:        false,
 		Hidden:          false,
-		HelpName:        "init!",
+		HelpName:        "tag",
 		BashComplete: func(c *cli.Context) {
 			// TODO: complete
 			fmt.Fprintf(c.App.Writer, "--better\n")
 		},
 		Action: tagAction,
 		Flags: []cli.Flag{
-			// &cli.StringFlag{
-			// 	Name:  "stage",
-			// 	Usage: "Use comma-separated `FILES` instead of ChangeLog.md",
-			// },
 			&cli.StringFlag{
 				Name:  "changelog-name",
 				Usage: "Name (including extension) of the ChangeLog file",

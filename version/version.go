@@ -36,7 +36,7 @@ func (v *Version) LoadFrom(path string) (err error) {
 	file := filepath.Join(path, VersionFile)
 	_, err = os.Stat(file)
 	if os.IsNotExist(err) {
-		err = errors.New("The given path does not exist")
+		err = fmt.Errorf("The given path does not exist: %v", file)
 		return
 	}
 

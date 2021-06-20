@@ -12,14 +12,14 @@ func Version() *cli.Command {
 	return &cli.Command{
 		Name:            "version",
 		Aliases:         []string{"v"},
-		Category:        "control",
-		Usage:           "init",
-		UsageText:       "version - display version",
+		Category:        "Informational",
+		Usage:           "Display version",
+		UsageText:       "version [--short|--long]",
 		Description:     "Displays the current version for the repository",
 		SkipFlagParsing: false,
 		HideHelp:        false,
 		Hidden:          false,
-		HelpName:        "init!",
+		HelpName:        "version",
 		BashComplete: func(c *cli.Context) {
 			// TODO: complete
 			fmt.Fprintf(c.App.Writer, "--better\n")

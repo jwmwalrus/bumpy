@@ -12,14 +12,14 @@ import (
 func Sync() *cli.Command {
 	return &cli.Command{
 		Name:            "sync",
-		Category:        "control",
-		Usage:           "sync",
-		UsageText:       "sync - synchronizes version file",
+		Category:        "Control",
+		Usage:           "Synchronizes version file",
+		UsageText:       "sync [--npm-prefix PREFIX] [--no-fetch]",
 		Description:     "Synchronizes version file with latest tag",
 		SkipFlagParsing: false,
 		HideHelp:        false,
 		Hidden:          false,
-		HelpName:        "init!",
+		HelpName:        "sync",
 		BashComplete: func(c *cli.Context) {
 			// TODO: complete
 			fmt.Fprintf(c.App.Writer, "--better\n")
@@ -28,11 +28,11 @@ func Sync() *cli.Command {
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:  "npm-prefix",
-				Usage: "Update package.json at the given location",
+				Usage: "Update package.json at the given `PREFIX`  location",
 			},
 			&cli.BoolFlag{
 				Name:  "no-fetch",
-				Usage: "Do no perform a `git fetch` operation",
+				Usage: "Do no perform a 'git fetch' operation",
 			},
 		},
 		OnUsageError: func(c *cli.Context, err error, isSubcommand bool) error {

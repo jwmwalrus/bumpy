@@ -16,14 +16,14 @@ func Bump() *cli.Command {
 	return &cli.Command{
 		Name:            "bump",
 		Aliases:         []string{"b"},
-		Category:        "control",
-		Usage:           "bump [--major|--minor|--patch] [--pre PRE] [--build BUILD] ...",
-		UsageText:       "bump - increase current version",
-		Description:     "Increases the current version according to the given flaGS",
+		Category:        "Git",
+		Usage:           "Increase current version",
+		UsageText:       "bump [--major|--minor|--patch] [--pre PRE] [--build BUILD] ...",
+		Description:     "Increases the current version according to the given options",
 		SkipFlagParsing: false,
 		HideHelp:        false,
 		Hidden:          false,
-		HelpName:        "bump!",
+		HelpName:        "bump",
 		BashComplete: func(c *cli.Context) {
 			// TODO: complete
 			fmt.Fprintf(c.App.Writer, "--better\n")
@@ -60,7 +60,7 @@ func Bump() *cli.Command {
 			},
 			&cli.BoolFlag{
 				Name:  "no-fetch",
-				Usage: "Do no perform a `git fetch` operation",
+				Usage: "Do no perform a 'git fetch' operation",
 			},
 			&cli.BoolFlag{
 				Name:  "no-commit",

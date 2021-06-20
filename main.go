@@ -12,7 +12,7 @@ import (
 func main() {
 	app := &cli.App{
 		Name:     "bumpy-ride",
-		Version:  "v0.1.0",
+		Version:  "v0.50.1",
 		Compiled: time.Now(),
 		Authors: []*cli.Author{
 			&cli.Author{
@@ -21,27 +21,22 @@ func main() {
 			},
 		},
 		Copyright: "(c) 2021 WalrusInc Solutions",
-		HelpName:  "contrive",
-		Usage:     "demonstrate available API",
-		UsageText: "contrive - demonstrating the available API",
-		ArgsUsage: "[args and such]",
+		HelpName:  "bumpy-ride",
+		Usage:     "A versioning tool",
+		UsageText: "bumpy-ride [command] [options ...]",
 		ExitErrHandler: func(c *cli.Context, err error) {
 			if err != nil {
 				fmt.Fprintf(c.App.ErrWriter, err.Error()+"\n")
 			}
 		},
-		Commands: getTasks(),
+		Commands: []*cli.Command{
+			task.Init(),
+			task.Bump(),
+			task.Sync(),
+			task.Tag(),
+			task.Version(),
+		},
 	}
 
 	app.Run(os.Args)
-}
-
-func getTasks() []*cli.Command {
-	return []*cli.Command{
-		task.Init(),
-		task.Bump(),
-		task.Sync(),
-		task.Tag(),
-		task.Version(),
-	}
 }

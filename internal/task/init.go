@@ -15,14 +15,14 @@ import (
 func Init() *cli.Command {
 	return &cli.Command{
 		Name:            "init",
-		Category:        "control",
-		Usage:           "init",
-		UsageText:       "init - creates an initial version file",
+		Category:        "Control",
+		Usage:           "Creates an initial version file",
+		UsageText:       "init [--no-fetch]",
 		Description:     "Creates an initial version file, using git tags as a hint",
 		SkipFlagParsing: false,
 		HideHelp:        false,
 		Hidden:          false,
-		HelpName:        "init!",
+		HelpName:        "init",
 		BashComplete: func(c *cli.Context) {
 			// TODO: complete
 			fmt.Fprintf(c.App.Writer, "--better\n")
@@ -31,7 +31,7 @@ func Init() *cli.Command {
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
 				Name:  "no-fetch",
-				Usage: "Do no perform a `git fetch` operation",
+				Usage: "Do no perform a 'git fetch' operation",
 			},
 		},
 		OnUsageError: func(c *cli.Context, err error, isSubcommand bool) error {
