@@ -62,6 +62,10 @@ func Bump() *cli.Command {
 				Name:  "no-fetch",
 				Usage: "Do no perform a `git fetch` operation",
 			},
+			&cli.BoolFlag{
+				Name:  "no-commit",
+				Usage: "Do no commit version file(s)",
+			},
 		},
 		OnUsageError: func(c *cli.Context, err error, isSubcommand bool) error {
 			// TODO: complete
@@ -130,8 +134,10 @@ func bumpAction(c *cli.Context) (err error) {
 		}
 	}
 
-	if err = git.CommitFiles(sList, "Bump version"); err != nil {
-		return
+	if !c.Bool("no-commit") {
+		if err = git.CommitFiles(sList, "Bump version"); err != nil {
+			return
+		}
 	}
 
 	fmt.Printf("Done!\n")
