@@ -9,6 +9,18 @@ This project uses [semantic versions](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.51.0] 2021-06-20
+
+Version task and commands help
+
+### Modified
+
+* Commands help
+
+### Added
+
+* The version task
+
 ## [0.50.1] 2021-06-20
 
 Fixes and improvements
