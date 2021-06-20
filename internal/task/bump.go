@@ -148,6 +148,7 @@ func checkVersionInSync(c *cli.Context) (err error) {
 
 	if tag, err = git.GetLatestTag(c.Bool("no-fetch")); err != nil {
 		fmt.Printf("WARNING, unable to obtain latest tag: %v\n", err)
+		err = nil
 		return
 	}
 
@@ -157,7 +158,7 @@ func checkVersionInSync(c *cli.Context) (err error) {
 	}
 
 	if !ok {
-		err = errors.New("Version in file does not match latest tag")
+		err = errors.New("Version in file does not match latest tag. Please sync")
 	}
 
 	return
