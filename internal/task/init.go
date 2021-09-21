@@ -54,7 +54,7 @@ func initAction(c *cli.Context) (err error) {
 	tag := ""
 	if tag, err = git.GetLatestTag(c.Bool("no-fetch")); err != nil {
 		err = v.Save()
-		fmt.Println("Done!")
+		fmt.Printf("Done!\n")
 		return
 	}
 
@@ -66,6 +66,6 @@ func initAction(c *cli.Context) (err error) {
 		return
 	}
 
-	fmt.Println("Done!")
+	fmt.Printf("Done!\n")
 	return
 }

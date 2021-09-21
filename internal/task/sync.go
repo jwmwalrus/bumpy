@@ -60,6 +60,6 @@ func syncAction(c *cli.Context) (err error) {
 
 	// TODO: update package.json
 
-	fmt.Println("Done!")
+	fmt.Printf("Done!\n")
 	return
 }

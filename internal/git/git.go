@@ -55,7 +55,7 @@ func GetLatestTag(noFetch bool) (tag string, err error) {
 	if !noFetch {
 		fmt.Printf("\tFetching...\n")
 		if _, err = exec.Command("git", "fetch", "--tags").CombinedOutput(); err != nil {
-			fmt.Println("...fetching failed!")
+			fmt.Printf("...fetching failed!\n")
 		}
 	}
 
