@@ -9,6 +9,18 @@ This project uses [semantic versions](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.51.1] 2021-00-20
+
+Cleanup
+
+### Modified
+
+* Printlin usage in favor of Printf
+
+### Removed
+
+* Dead code
+
 ## [0.51.0] 2021-06-20
 
 Version task and commands help
