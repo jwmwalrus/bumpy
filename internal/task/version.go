@@ -3,7 +3,8 @@ package task
 import (
 	"fmt"
 
-	"github.com/jwmwalrus/bumpy-ride/version"
+	"github.com/jwmwalrus/bumpy-ride/internal/config"
+	"github.com/jwmwalrus/bumpy-ride/pkg/version"
 	"github.com/urfave/cli/v2"
 )
 
@@ -46,9 +47,15 @@ func Version() *cli.Command {
 }
 
 func versionAction(c *cli.Context) (err error) {
+	var cfg config.Config
+	restoreCwd, err := cfg.Load()
+	if err != nil {
+		return
+	}
+	defer restoreCwd()
 
 	v := version.Version{}
-	if err = v.Load(); err != nil {
+	if err = v.LoadFrom(cfg.VersionPrefix); err != nil {
 		return
 	}
 

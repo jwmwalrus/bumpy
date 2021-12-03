@@ -7,8 +7,9 @@ import (
 	"os"
 	"strings"
 
+	"github.com/jwmwalrus/bumpy-ride/internal/config"
 	"github.com/jwmwalrus/bumpy-ride/internal/git"
-	"github.com/jwmwalrus/bumpy-ride/version"
+	"github.com/jwmwalrus/bumpy-ride/pkg/version"
 	"github.com/russross/blackfriday/v2"
 	"github.com/urfave/cli/v2"
 )
@@ -46,47 +47,44 @@ func Tag() *cli.Command {
 }
 
 func tagAction(c *cli.Context) (err error) {
-	fmt.Printf("\nLoading current version file...\n")
-	v := version.Version{}
-	if err = v.Load(); err != nil {
+	var cfg config.Config
+	restoreCwd, err := cfg.Load()
+	if err != nil {
 		return
 	}
-	fmt.Printf("\tVersion to use as tag: %v\n", v.String())
+	defer restoreCwd()
 
+	fmt.Printf("\nLoading current version file...\n")
+	v := version.Version{}
+	if err = v.LoadFrom(cfg.VersionPrefix); err != nil {
+		return
+	}
+
+	fmt.Printf("\tVersion to use as tag: %v\n", v.String())
 	filename := c.String("changelog-name")
 
-	if filename == "" {
-		fmt.Printf("\nLooking for a ChangeLog file\n")
-		commonNames := []string{
-			"CHANGELOG.md",
-			"ChangeLog.md",
-			"Changelog.md",
-			"HISTORY.md",
-			"History.md",
-			"NEWS.md",
-			"News.md",
-			"RELEASES.md",
-			"Releases.md",
-		}
-
-		for _, fn := range commonNames {
-			_, err = os.Stat(fn)
-			if os.IsNotExist(err) {
-				continue
-			}
-			fmt.Printf("\tFound filename: %v\n", fn)
-			filename = fn
-			break
-		}
-
-		if filename == "" {
-			fmt.Printf("\tUnable to find ChangeLog")
-			return
-		}
+	if filename, err = resolveChangeLogFilename(filename); err != nil {
+		return
 	}
 
 	fmt.Printf("\nLoading %v...\n", filename)
 
+	msg := getChangeLogMessage(v, filename)
+
+	if err = git.CommitFiles([]string{filename}, "Update ChangeLog"); err != nil {
+		return
+	}
+
+	if err = git.CreateTag(v.String(), strings.TrimSuffix(msg, "\n")); err != nil {
+		return
+	}
+
+	fmt.Printf("\nDone!\n")
+
+	return
+}
+
+func getChangeLogMessage(v version.Version, filename string) (msg string) {
 	file, err := os.Open(filename)
 	if err != nil {
 		return
@@ -108,11 +106,9 @@ func tagAction(c *cli.Context) (err error) {
 		return
 	}
 
-	msg := ""
-
 	node.Walk(func(n *blackfriday.Node, e bool) blackfriday.WalkStatus {
 		if e && n.Type == blackfriday.Heading && n.FirstChild != nil && n.Next != nil && n.Next.Type == blackfriday.Paragraph {
-			if strings.Contains(string(n.FirstChild.Literal), v.NoPrefix()) {
+			if strings.Contains(string(n.FirstChild.Literal), v.StringNoV()) {
 				msg = string(n.Next.FirstChild.Literal)
 				return blackfriday.Terminate
 			}
@@ -124,15 +120,41 @@ func tagAction(c *cli.Context) (err error) {
 		msg = "New version"
 	}
 
-	if err = git.CommitFiles([]string{filename}, "Update ChangeLog"); err != nil {
-		return
-	}
-
-	if err = git.CreateTag(v.String(), strings.TrimSuffix(msg, "\n")); err != nil {
-		return
-	}
-
-	fmt.Printf("\nDone!\n")
-
 	return
+}
+
+func resolveChangeLogFilename(filename string) (string, error) {
+	if filename == "" {
+		fmt.Printf("\nLooking for a ChangeLog file\n")
+		commonNames := []string{
+			"CHANGELOG.md",
+			"ChangeLog.md",
+			"Changelog.md",
+			"changelog.md",
+			"HISTORY.md",
+			"History.md",
+			"history.md",
+			"NEWS.md",
+			"News.md",
+			"news.md",
+			"RELEASES.md",
+			"Releases.md",
+			"releases.md",
+		}
+
+		for _, fn := range commonNames {
+			_, err := os.Stat(fn)
+			if os.IsNotExist(err) {
+				continue
+			}
+			fmt.Printf("\tFound filename: %v\n", fn)
+			filename = fn
+			break
+		}
+
+		if filename == "" {
+			return filename, fmt.Errorf("\tUnable to find ChangeLog")
+		}
+	}
+	return filename, nil
 }

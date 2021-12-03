@@ -3,8 +3,9 @@ package task
 import (
 	"fmt"
 
+	"github.com/jwmwalrus/bumpy-ride/internal/config"
 	"github.com/jwmwalrus/bumpy-ride/internal/git"
-	"github.com/jwmwalrus/bumpy-ride/version"
+	"github.com/jwmwalrus/bumpy-ride/pkg/version"
 	"github.com/urfave/cli/v2"
 )
 
@@ -25,16 +26,7 @@ func Sync() *cli.Command {
 			fmt.Fprintf(c.App.Writer, "--better\n")
 		},
 		Action: syncAction,
-		Flags: []cli.Flag{
-			&cli.StringFlag{
-				Name:  "npm-prefix",
-				Usage: "Update package.json at the given `PREFIX`  location",
-			},
-			&cli.BoolFlag{
-				Name:  "no-fetch",
-				Usage: "Do no perform a 'git fetch' operation",
-			},
-		},
+		Flags:  []cli.Flag{},
 		OnUsageError: func(c *cli.Context, err error, isSubcommand bool) error {
 			// TODO: complete
 			fmt.Fprintf(c.App.Writer, "for shame\n")
@@ -44,17 +36,24 @@ func Sync() *cli.Command {
 }
 
 func syncAction(c *cli.Context) (err error) {
-	v := version.Version{}
+	var cfg config.Config
+	restoreCwd, err := cfg.Load()
+	if err != nil {
+		return
+	}
+	defer restoreCwd()
+
 	tag := ""
-	if tag, err = git.GetLatestTag(c.Bool("no-fetch")); err != nil {
+	if tag, err = git.GetLatestTag(cfg.NoFetch); err != nil {
 		return
 	}
 
+	v := version.Version{}
 	if err = v.Parse(tag); err != nil {
 		return
 	}
 
-	if err = v.Save(); err != nil {
+	if err = v.SaveTo(cfg.VersionPrefix); err != nil {
 		return
 	}
 

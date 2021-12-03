@@ -6,8 +6,9 @@ import (
 	"os/exec"
 	"path/filepath"
 
+	"github.com/jwmwalrus/bumpy-ride/internal/config"
 	"github.com/jwmwalrus/bumpy-ride/internal/git"
-	"github.com/jwmwalrus/bumpy-ride/version"
+	"github.com/jwmwalrus/bumpy-ride/pkg/version"
 	"github.com/urfave/cli/v2"
 )
 
@@ -54,18 +55,6 @@ func Bump() *cli.Command {
 				Name:  "build",
 				Usage: "Assign `BUILD` to the build version string",
 			},
-			&cli.StringFlag{
-				Name:  "npm-prefix",
-				Usage: "Update package.json at the given `PREFIX`  location",
-			},
-			&cli.BoolFlag{
-				Name:  "no-fetch",
-				Usage: "Do no perform a 'git fetch' operation",
-			},
-			&cli.BoolFlag{
-				Name:  "no-commit",
-				Usage: "Do no commit version file(s)",
-			},
 		},
 		OnUsageError: func(c *cli.Context, err error, isSubcommand bool) error {
 			// TODO: complete
@@ -76,9 +65,15 @@ func Bump() *cli.Command {
 }
 
 func bumpAction(c *cli.Context) (err error) {
-	var v version.Version
+	var cfg config.Config
+	restoreCwd, err := cfg.Load()
+	if err != nil {
+		return
+	}
+	defer restoreCwd()
 
-	if err = v.Load(); err != nil {
+	var v version.Version
+	if err = v.LoadFrom(cfg.VersionPrefix); err != nil {
 		return
 	}
 
@@ -117,15 +112,18 @@ func bumpAction(c *cli.Context) (err error) {
 		v.Build = c.String("build")
 	}
 
-	if err = v.Save(); err != nil {
+	if err = v.SaveTo(cfg.VersionPrefix); err != nil {
 		return
 	}
 
-	sList := []string{filepath.Join("", version.VersionFile)}
+	sList := []string{
+		filepath.Join(".", config.Filename),
+		filepath.Join(cfg.VersionPrefix, version.Filename),
+	}
 
-	if c.String("npm-prefix") != "" {
+	for _, p := range cfg.NPMPrefixes {
 		var jsonFiles []string
-		if jsonFiles, err = updatePackageJSON(c.String("npm-prefix"), v); err != nil {
+		if jsonFiles, err = updatePackageJSON(p, v); err != nil {
 			return
 		}
 
@@ -134,7 +132,7 @@ func bumpAction(c *cli.Context) (err error) {
 		}
 	}
 
-	if !c.Bool("no-commit") {
+	if !cfg.NoCommit {
 		if err = git.CommitFiles(sList, "Bump version"); err != nil {
 			return
 		}
@@ -145,14 +143,21 @@ func bumpAction(c *cli.Context) (err error) {
 }
 
 func checkVersionInSync(c *cli.Context) (err error) {
+	var cfg config.Config
+	restoreCwd, err := cfg.Load()
+	if err != nil {
+		return
+	}
+	defer restoreCwd()
+
 	var vFromFile version.Version
 	var tag string
 
-	if err = vFromFile.Load(); err != nil {
+	if err = vFromFile.LoadFrom(cfg.VersionPrefix); err != nil {
 		return
 	}
 
-	if tag, err = git.GetLatestTag(c.Bool("no-fetch")); err != nil {
+	if tag, err = git.GetLatestTag(cfg.NoFetch); err != nil {
 		fmt.Printf("WARNING, unable to obtain latest tag: %v\n", err)
 		err = nil
 		return
