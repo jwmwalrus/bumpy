@@ -4,9 +4,13 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"os"
 	"os/exec"
 	"strings"
 )
+
+// RestoreCwdFunc defines the signature of the closure to restore the working directory
+type RestoreCwdFunc func() error
 
 // CreateTag creates an annotated tag
 func CreateTag(tag, msg string) (err error) {
@@ -85,6 +89,34 @@ func GetLatestTag(noFetch bool) (tag string, err error) {
 func HasGit() bool {
 	s, err := exec.LookPath("git")
 	return s != "" && err == nil
+}
+
+// MoveToRootDir changes working directory to git's root
+func MoveToRootDir() (RestoreCwdFunc, error) {
+	pwd, err := os.Getwd()
+	if err != nil {
+		return nil, err
+	}
+	root := pwd
+
+	cmd := exec.Command("git", "rev-parse", "--show-toplevel")
+	output := &bytes.Buffer{}
+	cmd.Stdout = output
+	if err = cmd.Run(); err != nil {
+		return nil, err
+	}
+
+	root = string(output.Bytes())
+	root = strings.TrimSuffix(root, "\n")
+	if root == pwd {
+		return func() error { return nil }, nil
+	}
+
+	if err = os.Chdir(root); err != nil {
+		return nil, err
+	}
+
+	return func() error { return os.Chdir(pwd) }, nil
 }
 
 // RemoveFromStaging removes the given files from the stagin area
