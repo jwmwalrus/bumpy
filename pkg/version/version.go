@@ -12,8 +12,8 @@ import (
 )
 
 const (
-	// VersionFile names the version file
-	VersionFile = "version.json"
+	// Filename names the version file
+	Filename = "version.json"
 )
 
 // Version Basic SemVer structure
@@ -25,6 +25,32 @@ type Version struct {
 	Build string `json:"build"`
 }
 
+// New returns an initial version
+func New() (v Version) {
+	v.Minor = 1
+	return
+}
+
+// Equals checks if two versions are identical
+func (v *Version) Equals(r Version) bool {
+	return v.Major == r.Major &&
+		v.Minor == r.Minor &&
+		v.Patch == r.Patch &&
+		v.Pre == r.Pre &&
+		v.Build == r.Build
+}
+
+// EqualsString checks if version is identical to string
+func (v *Version) EqualsString(s string) (ok bool, err error) {
+	var r Version
+	if err = r.Parse(s); err != nil {
+		return
+	}
+
+	ok = v.Equals(r)
+	return
+}
+
 // Load loads the version file from the current working directory
 func (v *Version) Load() (err error) {
 	err = v.LoadFrom(".")
@@ -33,7 +59,7 @@ func (v *Version) Load() (err error) {
 
 // LoadFrom loads the version file from the given path
 func (v *Version) LoadFrom(path string) (err error) {
-	file := filepath.Join(path, VersionFile)
+	file := filepath.Join(path, Filename)
 	_, err = os.Stat(file)
 	if os.IsNotExist(err) {
 		err = fmt.Errorf("The given path does not exist: %v", file)
@@ -53,21 +79,6 @@ func (v *Version) LoadFrom(path string) (err error) {
 	}
 
 	err = v.Read(byteValue)
-	return
-}
-
-// NoPrefix returns the version string, without a "v" prefix
-func (v *Version) NoPrefix() (out string) {
-	out = strconv.Itoa(v.Major) + "." + strconv.Itoa(v.Minor) + "." + strconv.Itoa(v.Patch)
-
-	if v.Pre != "" {
-		out += "-" + v.Pre
-	}
-
-	if v.Build != "" {
-		out += "+" + v.Build
-	}
-
 	return
 }
 
@@ -143,32 +154,27 @@ func (v *Version) SaveTo(path string) (err error) {
 		return
 	}
 
-	err = ioutil.WriteFile(filepath.Join(path, VersionFile), file, 0644)
+	err = ioutil.WriteFile(filepath.Join(path, Filename), file, 0644)
 	return
 }
 
 // String returns the version string
 func (v *Version) String() (out string) {
-	out = "v" + v.NoPrefix()
+	out = "v" + v.StringNoV()
 	return
 }
 
-// Equals checks if two versions are identical
-func (v *Version) Equals(r Version) bool {
-	return v.Major == r.Major &&
-		v.Minor == r.Minor &&
-		v.Patch == r.Patch &&
-		v.Pre == r.Pre &&
-		v.Build == r.Build
-}
+// StringNoV returns the version string, without a "v" prefix
+func (v *Version) StringNoV() (out string) {
+	out = strconv.Itoa(v.Major) + "." + strconv.Itoa(v.Minor) + "." + strconv.Itoa(v.Patch)
 
-// EqualsString checks if version is identical to string
-func (v *Version) EqualsString(s string) (ok bool, err error) {
-	var r Version
-	if err = r.Parse(s); err != nil {
-		return
+	if v.Pre != "" {
+		out += "-" + v.Pre
 	}
 
-	ok = v.Equals(r)
+	if v.Build != "" {
+		out += "+" + v.Build
+	}
+
 	return
 }
