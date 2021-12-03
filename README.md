@@ -19,14 +19,14 @@ For general instructions, go [here](https://golang.org/doc/install) --no pun int
 
 To install, open a terminal and execute the following
 ```bash
-go get -u github.com/jwmwalrus/bumpy-ride
+go install github.com/jwmwalrus/bumpy-ride@latest
 ```
 
 The same command can be used for subsequent updates.
 
 ## Usage
 
-**Bumpy Ride** stores a repository's current version in the `version.json` file at the root of said repository. The idea is to allow for the version to be embedded in the executable, easing further manipulation, with no regards for link-time flags and such.
+**Bumpy Ride** stores a repository's current version in the `version.json` file at any specified location in said repository (the default location is the root directory). The idea is to allow for the version to be embedded in the executable, easing further manipulation, with no regards for link-time flags and such.
 
 An overview of the available commands and options can be obtained by executing
 ```bash
@@ -41,7 +41,7 @@ These commands allow for manipulation of the `version.json` file that stores the
 
 #### init
 
-The `init` command initializes the repository's version --i.e., it creates the version file.
+The `init` command initializes the repository's version --i.e., it creates the configuration and the version files.
 
 Detailed information aobut the `init` command can be otained with:
 ```bash
@@ -59,7 +59,7 @@ bumpy-ride help sync
 
 ### Git-affecting Commants
 
-These commands may perform operations on the `version.json` file, and cause at least one commit and/or other git-related operation.
+These commands may perform operations on the `version.json` file, and cause at least one commit and/or other git-related operations.
 
 #### bump
 
@@ -95,12 +95,13 @@ bumpy-ride help version
 
 ## TODO
 
-- [x] Implement the init task
-- [x] Implement `bump [--major|--minor|--patch]` task
-- [x] Implement `bump [--pre PRE] [--build BUILD]` task
-- [x] Implement tag task
-- [x] Implement sync task
-- [x] Implement version task
+- [x] ~Implement the init task~
+- [x] ~Implement `bump [--major|--minor|--patch]` task~
+- [x] ~Implement `bump [--pre PRE] [--build BUILD]` task~
+- [x] ~Implement tag task~
+- [x] ~Implement sync task~
+- [x] ~Implement version task~
+- [x] ~Implement version configuration~
 - [ ] Implement incremental patterns for `--pre` and `--build`
 - [ ] Implement version operators
 - [ ] Allow tagging with an arbitrary list of files
