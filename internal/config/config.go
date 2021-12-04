@@ -60,9 +60,21 @@ func (cfg *Config) LoadOrCreate() (created bool, fn git.RestoreCwdFunc, err erro
 			return
 		}
 		created = true
+		return
 	}
 
 	err = cfg.Read()
+	return
+}
+
+// Read reads the configuration file
+func (cfg *Config) Read() (err error) {
+	bv, err := GetBytes()
+	if err != nil {
+		return
+	}
+
+	err = json.Unmarshal(bv, cfg)
 	return
 }
 
@@ -78,20 +90,14 @@ func (cfg *Config) Save() (err error) {
 	return
 }
 
-// Read reads the configuration file
-func (cfg *Config) Read() (err error) {
-
+// GetBytes reads the configuration file and returns its bytes
+func GetBytes() (bv []byte, err error) {
 	jsonFile, err := os.Open(filepath.Join(".", Filename))
 	if err != nil {
 		return
 	}
 	defer jsonFile.Close()
 
-	var bv []byte
 	bv, err = ioutil.ReadAll(jsonFile)
-	if err != nil {
-		return
-	}
-	err = json.Unmarshal(bv, cfg)
 	return
 }

@@ -31,15 +31,15 @@ func Init() *cli.Command {
 		Action: initAction,
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
-				Name:  "do-init-commit",
+				Name:  "persist",
 				Usage: "Perform a 'git commit' for the initialization",
 			},
 			&cli.BoolFlag{
 				Name:  "no-fetch",
-				Usage: "Do no perform a 'git fetch' operation, persistent",
+				Usage: "Do no perform a 'git fetch' operations, persistent as 'config.noFetch",
 			},
 			&cli.BoolFlag{
-				Name:  "no-comit",
+				Name:  "no-commit",
 				Usage: "Do no perform 'git commit' operations, persistent as 'config.noCommit'",
 			},
 			&cli.StringFlag{
@@ -94,7 +94,7 @@ func initAction(c *cli.Context) (err error) {
 		if !configCreated {
 			fmt.Printf("Overriding `prefix` in config file")
 		}
-		cfg.VersionPrefix = c.String("versionPrefix")
+		cfg.VersionPrefix = c.String("version-prefix")
 	} else if len(c.StringSlice("npm-prefix")) > 0 {
 		if !configCreated {
 			fmt.Printf("Overriding `npmPrefix` in config file")
@@ -120,13 +120,13 @@ func initAction(c *cli.Context) (err error) {
 		return
 	}
 
-	if c.Bool("do-init-commit") {
+	if c.Bool("persist") {
 		if err = git.CommitFiles(
 			[]string{
 				filepath.Join(".", config.Filename),
 				versionFile,
 			},
-			"Init Version",
+			"Init version",
 		); err != nil {
 			return
 		}

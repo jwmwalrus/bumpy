@@ -42,6 +42,7 @@ func main() {
 			task.Sync(),
 			task.Tag(),
 			task.Version(),
+			task.Config(),
 		},
 	}
 
