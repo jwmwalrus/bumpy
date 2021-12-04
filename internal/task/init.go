@@ -102,6 +102,10 @@ func initAction(c *cli.Context) (err error) {
 		cfg.NPMPrefixes = c.StringSlice("npm-prefix")
 	}
 
+	if err = cfg.Save(); err != nil {
+		return
+	}
+
 	v := version.Version{}
 	tag, err := git.GetLatestTag(cfg.NoFetch)
 	if err != nil {
