@@ -9,6 +9,21 @@ This project uses [semantic versions](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+* Fix init not populating .config
+* Bump should add .bumpy-ride only at request
+* add config command with options:
+    * --commit
+    * --no-commit
+    * --fetch
+    * --no-fetch
+    * --version-prefix
+    * --npm-prefix
+The config command should always output all
+
+## [0.53.1] 2021-12-03
+
+Dummy release
+
 ## [0.53.0] 2021-12-03
 
 Rename repository
