@@ -3,9 +3,9 @@ package task
 import (
 	"fmt"
 
-	"github.com/jwmwalrus/bumpy-ride/internal/config"
-	"github.com/jwmwalrus/bumpy-ride/internal/git"
-	"github.com/jwmwalrus/bumpy-ride/pkg/version"
+	"github.com/jwmwalrus/bumpy/internal/config"
+	"github.com/jwmwalrus/bumpy/internal/git"
+	"github.com/jwmwalrus/bumpy/pkg/version"
 	"github.com/urfave/cli/v2"
 )
 

@@ -19,7 +19,7 @@ For general instructions, go [here](https://golang.org/doc/install) --no pun int
 
 To install, open a terminal and execute the following
 ```bash
-go install github.com/jwmwalrus/bumpy-ride@latest
+go install github.com/jwmwalrus/bumpy@latest
 ```
 
 The same command can be used for subsequent updates.
@@ -30,7 +30,7 @@ The same command can be used for subsequent updates.
 
 An overview of the available commands and options can be obtained by executing
 ```bash
-bumpy-ride --help
+bumpy --help
 ```
 
 The available commands can be categorized into three groups: **control**, **git-affecting** and **informational**. 
@@ -45,7 +45,7 @@ The `init` command initializes the repository's version --i.e., it creates the c
 
 Detailed information aobut the `init` command can be otained with:
 ```bash
-bumpy-ride help init
+bumpy help init
 ```
 
 #### sync
@@ -54,7 +54,7 @@ The `sync` command makes sure that the version stored in `version.json` matches 
 
 Detailed information aobut the `sync` command can be otained with:
 ```bash
-bumpy-ride help sync
+bumpy help sync
 ```
 
 ### Git-affecting Commants
@@ -67,7 +67,7 @@ The `bump` command updates the `version.json` file, according to the given set o
 
 Detailed information aobut the `bump` command can be otained with:
 ```bash
-bumpy-ride help bump
+bumpy help bump
 ```
 
 #### tag
@@ -76,7 +76,7 @@ The `tag` command commits the ChangeLog file, and tags its commit with the lates
 
 Detailed information aobut the `tag` command can be otained with:
 ```bash
-bumpy-ride help tag
+bumpy help tag
 ```
 
 ### Informational Commands
@@ -89,7 +89,7 @@ The `version` command shows the current version stored in the `version.json` fil
 
 Detailed information aobut the `version` command can be otained with:
 ```bash
-bumpy-ride help version
+bumpy help version
 ```
 
 

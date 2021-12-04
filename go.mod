@@ -1,4 +1,4 @@
-module github.com/jwmwalrus/bumpy-ride
+module github.com/jwmwalrus/bumpy
 
 go 1.15
 

@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/jwmwalrus/bumpy-ride/internal/task"
+	"github.com/jwmwalrus/bumpy/internal/task"
 	"github.com/urfave/cli/v2"
 )
 
@@ -21,9 +21,9 @@ func main() {
 			},
 		},
 		Copyright: "(c) 2021 WalrusInc Solutions",
-		HelpName:  "bumpy-ride",
+		HelpName:  "bumpy",
 		Usage:     "A versioning tool",
-		UsageText: "bumpy-ride [command] [options ...]",
+		UsageText: "bumpy [command] [options ...]",
 		ExitErrHandler: func(c *cli.Context, err error) {
 			if err != nil {
 				fmt.Fprintf(c.App.ErrWriter, err.Error()+"\n")

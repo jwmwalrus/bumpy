@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/jwmwalrus/bumpy-ride/internal/git"
+	"github.com/jwmwalrus/bumpy/internal/git"
 )
 
 const (
