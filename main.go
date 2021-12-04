@@ -49,5 +49,7 @@ func main() {
 }
 
 func init() {
-	_ = appVersion.Load()
+	if err := appVersion.Read(versionJSON); err != nil {
+		panic(err)
+	}
 }
