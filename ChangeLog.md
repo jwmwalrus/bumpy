@@ -9,6 +9,19 @@ This project uses [semantic versions](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.53.0] 2021-12-03
+
+Rename repository
+
+### Fixed
+
+* Version displayed by the `--version flag`
+
+### Modified
+
+* Renamed repository in order to shorten binary.
+* Bumped go.mod version to 1.16
+
 ## [0.52.0] 2021-12-02
 
 Add config file
