@@ -9,16 +9,22 @@ This project uses [semantic versions](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-* Fix init not populating .config
-* Bump should add .bumpy-ride only at request
-* add config command with options:
-    * --commit
-    * --no-commit
-    * --fetch
-    * --no-fetch
-    * --version-prefix
-    * --npm-prefix
-The config command should always output all
+## [0.54.0] 2021-12-03
+
+Add config task
+
+### Fixed
+
+* Displaying version, again
+* The `init` task not affecting `.bumpy-ride`
+
+### Added
+
+* The `config` task
+
+### Modified
+
+* The `--do-init-commit` changed to `--persist` for the init task
 
 ## [0.53.1] 2021-12-03
 
@@ -30,7 +36,7 @@ Rename repository
 
 ### Fixed
 
-* Version displayed by the `--version flag`
+* Version displayed by the `--version` flag
 
 ### Modified
 
