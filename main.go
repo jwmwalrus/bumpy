@@ -1,18 +1,25 @@
 package main
 
 import (
+	_ "embed"
 	"fmt"
 	"os"
 	"time"
 
 	"github.com/jwmwalrus/bumpy/internal/task"
+	"github.com/jwmwalrus/bumpy/pkg/version"
 	"github.com/urfave/cli/v2"
 )
+
+//go:embed version.json
+var versionJSON []byte
+
+var appVersion version.Version
 
 func main() {
 	app := &cli.App{
 		Name:     "bumpy-ride",
-		Version:  "v0.50.1",
+		Version:  appVersion.String(),
 		Compiled: time.Now(),
 		Authors: []*cli.Author{
 			&cli.Author{
@@ -39,4 +46,8 @@ func main() {
 	}
 
 	app.Run(os.Args)
+}
+
+func init() {
+	_ = appVersion.Load()
 }
