@@ -11,7 +11,7 @@ A versioning tool.
 
 ## Requirements
 
-* Go version 1.15 or higher. 
+* Go version 1.16 or higher. 
 You can probably install it through your system's package manager (`apt`, `brew`, etc.). 
 For general instructions, go [here](https://golang.org/doc/install) --no pun intended.
 
