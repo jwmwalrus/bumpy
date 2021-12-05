@@ -9,6 +9,18 @@ This project uses [semantic versions](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.54.1] 2021-12-04
+
+Cleanup
+
+### Fixed
+
+* Requirements in the README
+
+### Added
+
+* config-related entry to the README
+
 ## [0.54.0] 2021-12-03
 
 Add config task
