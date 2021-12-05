@@ -48,6 +48,15 @@ Detailed information aobut the `init` command can be otained with:
 bumpy help init
 ```
 
+#### config
+
+The `config` command updates the repository's version configuration file, according to the provided options, and displays its resulting contents.
+
+Detailed information aobut the `config` command can be otained with:
+```bash
+bumpy help config
+```
+
 #### sync
 
 The `sync` command makes sure that the version stored in `version.json` matches the latest git tag available.

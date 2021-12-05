@@ -14,7 +14,7 @@ func Config() *cli.Command {
 	return &cli.Command{
 		Name:            "config",
 		Aliases:         []string{"c"},
-		Category:        "Git",
+		Category:        "Control",
 		Usage:           "Modify the version config file",
 		UsageText:       "config [<flags>...] ...",
 		Description:     "Modify the version configuration file and display its contents",
