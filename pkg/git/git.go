@@ -48,6 +48,37 @@ func CommitFiles(sList []string, m string) (err error) {
 	return
 }
 
+// Describe returns the corresponding tag for the given hash
+func Describe(hash string, exact ...bool) (string, error) {
+	list := []string{"describe"}
+	if len(exact) > 0 && exact[0] {
+		list = append(list, "--match-exact")
+	}
+	list = append(list, hash)
+	cmd1 := exec.Command("git", list...)
+	output1 := &bytes.Buffer{}
+	cmd1.Stdout = output1
+	if err := cmd1.Run(); err != nil {
+		return "", err
+	}
+	tag := string(output1.Bytes())
+	tag = strings.TrimSuffix(tag, "\n")
+	return tag, nil
+}
+
+// FileChanged checks if a file changed and should be added to staging
+func FileChanged(file string) bool {
+	cmd1 := exec.Command("git", "diff", "--name-only", file)
+	output1 := &bytes.Buffer{}
+	cmd1.Stdout = output1
+	if err := cmd1.Run(); err != nil {
+		return false
+	}
+	diff := string(output1.Bytes())
+	diff = strings.TrimSuffix(diff, "\n")
+	return len(diff) > 0
+}
+
 // GetLatestTag Returns the latest tag for the git repo related to the working directory
 func GetLatestTag(noFetch bool) (tag string, err error) {
 	if !HasGit() {
