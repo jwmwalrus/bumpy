@@ -9,6 +9,24 @@ This project uses [semantic versions](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.55.0] 2022-03-24
+
+Misc. Changes
+
+### Added
+
+* Exposing raw vcs-related values from runtime
+    * Done through `version.LastCommit()` method.
+* Flag to tag with a message
+
+### Modified
+
+* Made the git package public
+* Updated Go version
+* Reviewed tasks' help
+* Updated README
+    * Fixed typos and removed TODO list
+
 ## [0.54.1] 2021-12-04
 
 Cleanup
