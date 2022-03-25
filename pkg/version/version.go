@@ -24,10 +24,6 @@ type Version struct {
 	Patch int    `json:"patch"`
 	Pre   string `json:"pre"`
 	Build string `json:"build"`
-
-	revision string
-	time     time.Time
-	modified bool
 }
 
 // New returns an initial version
@@ -54,11 +50,6 @@ func (v *Version) EqualsString(s string) (ok bool, err error) {
 
 	ok = v.Equals(r)
 	return
-}
-
-// GetLastCommit returns the embedded vcs-related information
-func (v *Version) GetLastCommit() (string, time.Time, bool) {
-	return v.revision, v.time, v.modified
 }
 
 // Load loads the version file from the current working directory
@@ -88,11 +79,7 @@ func (v *Version) LoadFrom(dir string) (err error) {
 		return
 	}
 
-	if err = v.Read(byteValue); err != nil {
-		return
-	}
-
-	err = v.getBuildInfo()
+	err = v.Read(byteValue)
 	return
 }
 
@@ -191,7 +178,8 @@ func (v *Version) StringNoV() (out string) {
 	return
 }
 
-func (v *Version) getBuildInfo() (err error) {
+// GetBuildInfo returns the embedded vcs-related information
+func GetBuildInfo() (rev string, t time.Time, mod bool, err error) {
 	bi, ok := debug.ReadBuildInfo()
 	if !ok {
 		err = fmt.Errorf("Error obtaining runtime debug.BuildInfo")
@@ -219,9 +207,9 @@ func (v *Version) getBuildInfo() (err error) {
 		return
 	}
 
-	v.revision = vRevision
-	v.time = vTime
-	v.modified = vModified
+	rev = vRevision
+	t = vTime
+	mod = vModified
 
 	return
 }
