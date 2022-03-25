@@ -80,8 +80,7 @@ func (cfg *Config) Read() (err error) {
 
 // Save writes the configuration file
 func (cfg *Config) Save() (err error) {
-	var bv []byte
-	bv, err = json.MarshalIndent(*cfg, "", "  ")
+	bv, err := json.MarshalIndent(*cfg, "", "  ")
 	if err != nil {
 		return
 	}

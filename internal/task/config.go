@@ -22,11 +22,7 @@ func Config() *cli.Command {
 		HideHelp:        false,
 		Hidden:          false,
 		HelpName:        "config",
-		BashComplete: func(c *cli.Context) {
-			// TODO: complete
-			fmt.Fprintf(c.App.Writer, "--better\n")
-		},
-		Action: configAction,
+		Action:          configAction,
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
 				Name:  "persist",
@@ -64,11 +60,6 @@ func Config() *cli.Command {
 				Name:  "clear-npm-prefixes",
 				Usage: "Clears the list of npm prefixes in the config",
 			},
-		},
-		OnUsageError: func(c *cli.Context, err error, isSubcommand bool) error {
-			// TODO: complete
-			fmt.Fprintf(c.App.Writer, "for shame\n")
-			return err
 		},
 	}
 }

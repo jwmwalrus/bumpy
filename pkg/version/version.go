@@ -57,9 +57,9 @@ func (v *Version) Load() (err error) {
 	return
 }
 
-// LoadFrom loads the version file from the given path
-func (v *Version) LoadFrom(path string) (err error) {
-	file := filepath.Join(path, Filename)
+// LoadFrom loads the version file from the given directory
+func (v *Version) LoadFrom(dir string) (err error) {
+	file := filepath.Join(dir, Filename)
 	_, err = os.Stat(file)
 	if os.IsNotExist(err) {
 		err = fmt.Errorf("The given path does not exist: %v", file)
@@ -83,7 +83,7 @@ func (v *Version) LoadFrom(path string) (err error) {
 }
 
 // Parse parses a version string into its fields
-func (v *Version) Parse(s string) (err error) {
+func (v *Version) Parse(s string) error {
 	var core, pre, build []byte
 	var inCore, inPre, inBuild bool
 	inCore = true
@@ -105,8 +105,8 @@ func (v *Version) Parse(s string) (err error) {
 			} else if inBuild {
 				build = append(build, byte(c))
 			} else {
-				err = fmt.Errorf("Error parsing version string at character '%v', position %v", c, i+1)
-				return
+				return fmt.Errorf("Error parsing version string at character '%v', position %v",
+					c, i+1)
 			}
 		}
 	}
@@ -114,15 +114,14 @@ func (v *Version) Parse(s string) (err error) {
 	a := strings.Split(string(core), ".")
 
 	if len(a) != 3 {
-		err = errors.New("Version string does not follow a major.minor.patch pattern")
-		return
+		return fmt.Errorf("Version string does not follow a major.minor.patch pattern")
 	}
 
 	mmp := make([]int64, 3)
 	for i, x := range a {
+		var err error
 		if mmp[i], err = strconv.ParseInt(x, 10, 32); err != nil {
-			err = fmt.Errorf("Cover version #%v is not an integer", i+1)
-			return
+			return fmt.Errorf("Cover version #%v is not an integer", i+1)
 		}
 	}
 	v.Major = int(mmp[0])
@@ -131,7 +130,7 @@ func (v *Version) Parse(s string) (err error) {
 	v.Pre = string(pre)
 	v.Build = string(build)
 
-	return
+	return nil
 }
 
 // Read reads the version from the given bytes
@@ -146,27 +145,26 @@ func (v *Version) Save() (err error) {
 	return
 }
 
-// SaveTo saves the version file to the given path
-func (v *Version) SaveTo(path string) (err error) {
+// SaveTo saves the version file to the given directory
+func (v *Version) SaveTo(dir string) (err error) {
 	var file []byte
 	file, err = json.Marshal(v)
 	if err != nil {
 		return
 	}
 
-	err = ioutil.WriteFile(filepath.Join(path, Filename), file, 0644)
+	err = ioutil.WriteFile(filepath.Join(dir, Filename), file, 0644)
 	return
 }
 
-// String returns the version string
-func (v *Version) String() (out string) {
-	out = "v" + v.StringNoV()
-	return
+func (v *Version) String() string {
+	return "v" + v.StringNoV()
 }
 
 // StringNoV returns the version string, without a "v" prefix
 func (v *Version) StringNoV() (out string) {
-	out = strconv.Itoa(v.Major) + "." + strconv.Itoa(v.Minor) + "." + strconv.Itoa(v.Patch)
+	out = strconv.Itoa(v.Major) + "." + strconv.Itoa(v.Minor) + "." +
+		strconv.Itoa(v.Patch)
 
 	if v.Pre != "" {
 		out += "-" + v.Pre

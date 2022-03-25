@@ -25,12 +25,8 @@ func Bump() *cli.Command {
 		HideHelp:        false,
 		Hidden:          false,
 		HelpName:        "bump",
-		BashComplete: func(c *cli.Context) {
-			// TODO: complete
-			fmt.Fprintf(c.App.Writer, "--better\n")
-		},
-		Before: checkVersionInSync,
-		Action: bumpAction,
+		Before:          checkVersionInSync,
+		Action:          bumpAction,
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
 				Name:    "major",
@@ -55,11 +51,6 @@ func Bump() *cli.Command {
 				Name:  "build",
 				Usage: "Assign `BUILD` to the build version string",
 			},
-		},
-		OnUsageError: func(c *cli.Context, err error, isSubcommand bool) error {
-			// TODO: complete
-			fmt.Fprintf(c.App.Writer, "for shame\n")
-			return err
 		},
 	}
 }
@@ -116,7 +107,7 @@ func bumpAction(c *cli.Context) (err error) {
 		return
 	}
 
-	sList := []string{
+	slist := []string{
 		filepath.Join(".", config.Filename),
 		filepath.Join(cfg.VersionPrefix, version.Filename),
 	}
@@ -128,17 +119,17 @@ func bumpAction(c *cli.Context) (err error) {
 		}
 
 		for _, f := range jsonFiles {
-			sList = append(sList, f)
+			slist = append(slist, f)
 		}
 	}
 
 	if !cfg.NoCommit {
-		if err = git.CommitFiles(sList, "Bump version"); err != nil {
+		if err = git.CommitFiles(slist, "Bump version"); err != nil {
 			return
 		}
 	}
 
-	fmt.Printf("Done!\n")
+	fmt.Printf("Done!\n\nNext tag will be: %v\n", v.String())
 	return
 }
 

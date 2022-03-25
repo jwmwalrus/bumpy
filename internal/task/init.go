@@ -24,11 +24,7 @@ func Init() *cli.Command {
 		HideHelp:        false,
 		Hidden:          false,
 		HelpName:        "init",
-		BashComplete: func(c *cli.Context) {
-			// TODO: complete
-			fmt.Fprintf(c.App.Writer, "--better\n")
-		},
-		Action: initAction,
+		Action:          initAction,
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
 				Name:  "persist",
@@ -36,7 +32,7 @@ func Init() *cli.Command {
 			},
 			&cli.BoolFlag{
 				Name:  "no-fetch",
-				Usage: "Do no perform a 'git fetch' operations, persistent as 'config.noFetch",
+				Usage: "Do no perform a 'git fetch' operation, persistent as 'config.noFetch'",
 			},
 			&cli.BoolFlag{
 				Name:  "no-commit",
@@ -50,11 +46,6 @@ func Init() *cli.Command {
 				Name:  "npm-prefix",
 				Usage: "ubdirectory to find 'package.json', persistent as 'config.npmPrefixes'",
 			},
-		},
-		OnUsageError: func(c *cli.Context, err error, isSubcommand bool) error {
-			// TODO: complete
-			fmt.Fprintf(c.App.Writer, "for shame\n")
-			return err
 		},
 	}
 }

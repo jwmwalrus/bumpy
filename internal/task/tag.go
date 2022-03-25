@@ -27,21 +27,12 @@ func Tag() *cli.Command {
 		HideHelp:        false,
 		Hidden:          false,
 		HelpName:        "tag",
-		BashComplete: func(c *cli.Context) {
-			// TODO: complete
-			fmt.Fprintf(c.App.Writer, "--better\n")
-		},
-		Action: tagAction,
+		Action:          tagAction,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:  "changelog-name",
 				Usage: "Name (including extension) of the ChangeLog file",
 			},
-		},
-		OnUsageError: func(c *cli.Context, err error, isSubcommand bool) error {
-			// TODO: complete
-			fmt.Fprintf(c.App.Writer, "for shame\n")
-			return err
 		},
 	}
 }

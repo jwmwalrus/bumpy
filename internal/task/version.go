@@ -21,11 +21,7 @@ func Version() *cli.Command {
 		HideHelp:        false,
 		Hidden:          false,
 		HelpName:        "version",
-		BashComplete: func(c *cli.Context) {
-			// TODO: complete
-			fmt.Fprintf(c.App.Writer, "--better\n")
-		},
-		Action: versionAction,
+		Action:          versionAction,
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
 				Name:    "short",
@@ -37,11 +33,6 @@ func Version() *cli.Command {
 				Aliases: []string{"l"},
 				Usage:   "Long, detailed version",
 			},
-		},
-		OnUsageError: func(c *cli.Context, err error, isSubcommand bool) error {
-			// TODO: complete
-			fmt.Fprintf(c.App.Writer, "for shame\n")
-			return err
 		},
 	}
 }

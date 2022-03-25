@@ -15,23 +15,14 @@ func Sync() *cli.Command {
 		Name:            "sync",
 		Category:        "Control",
 		Usage:           "Synchronizes version file",
-		UsageText:       "sync [--npm-prefix PREFIX] [--no-fetch]",
+		UsageText:       "sync",
 		Description:     "Synchronizes version file with latest tag",
 		SkipFlagParsing: false,
 		HideHelp:        false,
 		Hidden:          false,
 		HelpName:        "sync",
-		BashComplete: func(c *cli.Context) {
-			// TODO: complete
-			fmt.Fprintf(c.App.Writer, "--better\n")
-		},
-		Action: syncAction,
-		Flags:  []cli.Flag{},
-		OnUsageError: func(c *cli.Context, err error, isSubcommand bool) error {
-			// TODO: complete
-			fmt.Fprintf(c.App.Writer, "for shame\n")
-			return err
-		},
+		Action:          syncAction,
+		Flags:           []cli.Flag{},
 	}
 }
 
@@ -56,8 +47,6 @@ func syncAction(c *cli.Context) (err error) {
 	if err = v.SaveTo(cfg.VersionPrefix); err != nil {
 		return
 	}
-
-	// TODO: update package.json
 
 	fmt.Printf("Done!\n")
 	return
