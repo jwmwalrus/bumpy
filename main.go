@@ -18,16 +18,10 @@ var appVersion version.Version
 
 func main() {
 	app := &cli.App{
-		Name:     "bumpy-ride",
-		Version:  appVersion.String(),
-		Compiled: time.Now(),
-		Authors: []*cli.Author{
-			&cli.Author{
-				Name:  "John M",
-				Email: "jwmwalrus@gmail.com",
-			},
-		},
-		Copyright: "(c) 2021 WalrusInc Solutions",
+		Name:      "bumpy-ride",
+		Version:   appVersion.String(),
+		Compiled:  time.Now(),
+		Copyright: "(c) 2022 WalrusAhead Solutions",
 		HelpName:  "bumpy",
 		Usage:     "A versioning tool",
 		UsageText: "bumpy [command] [options ...]",
