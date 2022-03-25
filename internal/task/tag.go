@@ -33,6 +33,10 @@ func Tag() *cli.Command {
 				Name:  "changelog-name",
 				Usage: "Name (including extension) of the ChangeLog file",
 			},
+			&cli.StringFlag{
+				Name:  "tag-message",
+				Usage: "Message to use instead of parsing a ChangeLog",
+			},
 		},
 	}
 }
@@ -52,21 +56,30 @@ func tagAction(c *cli.Context) (err error) {
 	}
 
 	fmt.Printf("\tVersion to use as tag: %v\n", v.String())
-	filename := c.String("changelog-name")
 
-	if filename, err = resolveChangeLogFilename(filename); err != nil {
-		return
+	msg := c.String("tag-message")
+	if msg == "" {
+		filename := c.String("changelog-name")
+
+		if filename, err = resolveChangeLogFilename(filename); err != nil {
+			return
+		}
+
+		fmt.Printf("\nLoading %v...\n", filename)
+
+		msg = getChangeLogMessage(v, filename)
+		msg = strings.TrimSuffix(msg, "\n")
+
+		if err = git.CommitFiles([]string{filename}, "Update ChangeLog"); err != nil {
+			return
+		}
 	}
 
-	fmt.Printf("\nLoading %v...\n", filename)
-
-	msg := getChangeLogMessage(v, filename)
-
-	if err = git.CommitFiles([]string{filename}, "Update ChangeLog"); err != nil {
-		return
+	if msg == "" {
+		msg = "New version"
 	}
 
-	if err = git.CreateTag(v.String(), strings.TrimSuffix(msg, "\n")); err != nil {
+	if err = git.CreateTag(v.String(), msg); err != nil {
 		return
 	}
 
@@ -106,10 +119,6 @@ func getChangeLogMessage(v version.Version, filename string) (msg string) {
 		}
 		return blackfriday.GoToNext
 	})
-
-	if msg == "" {
-		msg = "New version"
-	}
 
 	return
 }
