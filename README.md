@@ -7,11 +7,10 @@ A versioning tool.
 * [Requirements](#requirements)
 * [Installation](#installation)
 * [Usage](#usage)
-* [TODO](#todo)
 
 ## Requirements
 
-* Go version 1.16 or higher. 
+* Go version 1.18 or higher. 
 You can probably install it through your system's package manager (`apt`, `brew`, etc.). 
 For general instructions, go [here](https://golang.org/doc/install) --no pun intended.
 
@@ -26,7 +25,7 @@ The same command can be used for subsequent updates.
 
 ## Usage
 
-**Bumpy Ride** stores a repository's current version in the `version.json` file at any specified location in said repository (the default location is the root directory). The idea is to allow for the version to be embedded in the executable, easing further manipulation, with no regards for link-time flags and such.
+**Bumpy Ride** stores a repository's current version in the `version.json` file at any specified location in said repository (the default location is the root directory). The idea is to allow for the version to be embedded in the executable, easing further manipulation.
 
 An overview of the available commands and options can be obtained by executing
 ```bash
@@ -66,7 +65,7 @@ Detailed information aobut the `sync` command can be otained with:
 bumpy help sync
 ```
 
-### Git-affecting Commants
+### Git-affecting Commands
 
 These commands may perform operations on the `version.json` file, and cause at least one commit and/or other git-related operations.
 
@@ -81,7 +80,7 @@ bumpy help bump
 
 #### tag
 
-The `tag` command commits the ChangeLog file, and tags its commit with the latest version from `version.json`.
+The `tag` command commits the `ChangeLog.md` file, and tags its commit with the latest version from `version.json`.
 
 Detailed information aobut the `tag` command can be otained with:
 ```bash
@@ -100,18 +99,3 @@ Detailed information aobut the `version` command can be otained with:
 ```bash
 bumpy help version
 ```
-
-
-## TODO
-
-- [x] ~Implement the init task~
-- [x] ~Implement `bump [--major|--minor|--patch]` task~
-- [x] ~Implement `bump [--pre PRE] [--build BUILD]` task~
-- [x] ~Implement tag task~
-- [x] ~Implement sync task~
-- [x] ~Implement version task~
-- [x] ~Implement version configuration~
-- [ ] Implement incremental patterns for `--pre` and `--build`
-- [ ] Implement version operators
-- [ ] Allow tagging with an arbitrary list of files
-
