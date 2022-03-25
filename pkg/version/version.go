@@ -2,13 +2,14 @@ package version
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"runtime/debug"
 	"strconv"
 	"strings"
+	"time"
 )
 
 const (
@@ -23,6 +24,10 @@ type Version struct {
 	Patch int    `json:"patch"`
 	Pre   string `json:"pre"`
 	Build string `json:"build"`
+
+	revision string
+	time     time.Time
+	modified bool
 }
 
 // New returns an initial version
@@ -49,6 +54,11 @@ func (v *Version) EqualsString(s string) (ok bool, err error) {
 
 	ok = v.Equals(r)
 	return
+}
+
+// GetLastCommit returns the embedded vcs-related information
+func (v *Version) GetLastCommit() (string, time.Time, bool) {
+	return v.revision, v.time, v.modified
 }
 
 // Load loads the version file from the current working directory
@@ -78,7 +88,11 @@ func (v *Version) LoadFrom(dir string) (err error) {
 		return
 	}
 
-	err = v.Read(byteValue)
+	if err = v.Read(byteValue); err != nil {
+		return
+	}
+
+	err = v.getBuildInfo()
 	return
 }
 
@@ -173,6 +187,41 @@ func (v *Version) StringNoV() (out string) {
 	if v.Build != "" {
 		out += "+" + v.Build
 	}
+
+	return
+}
+
+func (v *Version) getBuildInfo() (err error) {
+	bi, ok := debug.ReadBuildInfo()
+	if !ok {
+		err = fmt.Errorf("Error obtaining runtime debug.BuildInfo")
+		return
+	}
+
+	var vRevision string
+	var vTime time.Time
+	var isGit, vModified bool
+	for _, s := range bi.Settings {
+		switch s.Key {
+		case "vcs":
+			isGit = s.Value == "git"
+		case "vcs.revision":
+			vRevision = s.Value
+		case "vcs.time":
+			vTime, _ = time.Parse(time.RFC3339, s.Value)
+		case "vcs.modified":
+			vModified = s.Value == "true"
+		}
+	}
+
+	if !isGit {
+		err = fmt.Errorf("Unsupported VCS")
+		return
+	}
+
+	v.revision = vRevision
+	v.time = vTime
+	v.modified = vModified
 
 	return
 }
