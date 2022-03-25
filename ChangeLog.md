@@ -9,6 +9,10 @@ This project uses [semantic versions](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.56.2] 2022-03-24
+
+Detach BuildInfo from the version struct
+
 ## [0.56.1] 2022-03-24
 
 Dummy release
