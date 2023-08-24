@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/jwmwalrus/bumpy/pkg/git"
+	"github.com/jwmwalrus/bnp/git"
 )
 
 const (

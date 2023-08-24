@@ -6,8 +6,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/jwmwalrus/bumpy/internal/task"
-	"github.com/jwmwalrus/bumpy/pkg/version"
+	"github.com/jwmwalrus/bumpy/task"
+	"github.com/jwmwalrus/bumpy/version"
 	"github.com/urfave/cli/v2"
 )
 

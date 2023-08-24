@@ -6,9 +6,9 @@ import (
 	"os/exec"
 	"path/filepath"
 
+	"github.com/jwmwalrus/bnp/git"
 	"github.com/jwmwalrus/bumpy/internal/config"
-	"github.com/jwmwalrus/bumpy/pkg/git"
-	"github.com/jwmwalrus/bumpy/pkg/version"
+	"github.com/jwmwalrus/bumpy/version"
 	"github.com/urfave/cli/v2"
 )
 

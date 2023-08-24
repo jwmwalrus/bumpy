@@ -1,10 +1,14 @@
 module github.com/jwmwalrus/bumpy
 
-go 1.18
+go 1.21
 
 require (
+	github.com/jwmwalrus/bnp v1.15.0
 	github.com/russross/blackfriday/v2 v2.1.0
-	github.com/urfave/cli/v2 v2.3.0
+	github.com/urfave/cli/v2 v2.25.7
 )
 
-require github.com/cpuguy83/go-md2man/v2 v2.0.1 // indirect
+require (
+	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
+	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect
+)
