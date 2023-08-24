@@ -9,6 +9,16 @@ This project uses [semantic versions](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.57.0] 2023-08-23
+
+Reorganize
+
+### Modified
+
+* Move the git package to bnp
+* Get rid of `pkg`
+* Move the task package out of `internal`
+
 ## [0.56.2] 2022-03-24
 
 Detach BuildInfo from the version struct
