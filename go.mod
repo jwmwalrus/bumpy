@@ -3,7 +3,7 @@ module github.com/jwmwalrus/bumpy
 go 1.21
 
 require (
-	github.com/jwmwalrus/bnp v1.17.0
+	github.com/jwmwalrus/bnp v1.18.0
 	github.com/russross/blackfriday/v2 v2.1.0
 	github.com/urfave/cli/v2 v2.25.7
 )

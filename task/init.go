@@ -98,7 +98,7 @@ func initAction(c *cli.Context) (err error) {
 	}
 
 	v := version.Version{}
-	tag, err := cfg.Git.GetLatestTag(cfg.NoFetch)
+	tag, err := cfg.Git.LatestTag(cfg.NoFetch)
 	if err != nil {
 		v = version.New()
 	} else {

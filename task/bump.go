@@ -143,7 +143,7 @@ func checkVersionInSync(c *cli.Context) (err error) {
 		return
 	}
 
-	if tag, err = cfg.Git.GetLatestTag(cfg.NoFetch); err != nil {
+	if tag, err = cfg.Git.LatestTag(cfg.NoFetch); err != nil {
 		fmt.Printf("WARNING, unable to obtain latest tag: %v\n", err)
 		err = nil
 		return

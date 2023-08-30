@@ -32,7 +32,7 @@ func syncAction(c *cli.Context) (err error) {
 	}
 
 	tag := ""
-	if tag, err = cfg.Git.GetLatestTag(cfg.NoFetch); err != nil {
+	if tag, err = cfg.Git.LatestTag(cfg.NoFetch); err != nil {
 		return
 	}
 

@@ -1,7 +1,7 @@
 github.com/cpuguy83/go-md2man/v2 v2.0.2 h1:p1EgwI/C7NhT0JmVkwCD2ZBK8j4aeHQX2pMHHBfMQ6w=
 github.com/cpuguy83/go-md2man/v2 v2.0.2/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=
-github.com/jwmwalrus/bnp v1.17.0 h1:RC4cBwpNI59kAM9iimr/ulTBG/UG3D6vXZ+txEJKE5g=
-github.com/jwmwalrus/bnp v1.17.0/go.mod h1:rKgyUIGhsOKgeRAnbXmSDY5RuT1embJseSGB7y3e1Vw=
+github.com/jwmwalrus/bnp v1.18.0 h1:YKx/8RQjhLu7x9sEMoDfhqwFLK2d2tiMo+pWMGDjuIE=
+github.com/jwmwalrus/bnp v1.18.0/go.mod h1:rKgyUIGhsOKgeRAnbXmSDY5RuT1embJseSGB7y3e1Vw=
 github.com/russross/blackfriday/v2 v2.1.0 h1:JIOH55/0cWyOuilr9/qlrm0BSXldqnqwMsf35Ld67mk=
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
 github.com/urfave/cli/v2 v2.25.7 h1:VAzn5oq403l5pHjc4OhD54+XGO9cdKVL/7lDjF+iKUs=
