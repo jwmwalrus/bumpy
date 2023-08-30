@@ -6,7 +6,6 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/jwmwalrus/bnp/git"
 	"github.com/jwmwalrus/bumpy/internal/config"
 	"github.com/jwmwalrus/bumpy/version"
 	"github.com/urfave/cli/v2"
@@ -51,12 +50,10 @@ func Init() *cli.Command {
 }
 
 func initAction(c *cli.Context) (err error) {
-	var cfg config.Config
-	configCreated, restoreCwd, err := cfg.LoadOrCreate()
+	cfg, configCreated, err := config.LoadOrCreate()
 	if err != nil {
 		return
 	}
-	defer restoreCwd()
 
 	if !configCreated {
 		fmt.Printf("Config file already existed!\n")
@@ -76,17 +73,20 @@ func initAction(c *cli.Context) (err error) {
 			fmt.Printf("Overriding `noFetch` in config file")
 		}
 		cfg.NoFetch = c.Bool("no-fetch")
-	} else if c.Bool("no-commit") {
+	}
+	if c.Bool("no-commit") {
 		if !configCreated {
 			fmt.Printf("Overriding `noCommit` in config file")
 		}
 		cfg.NoCommit = c.Bool("no-commit")
-	} else if c.String("version-prefix") != "" {
+	}
+	if c.String("version-prefix") != "" {
 		if !configCreated {
 			fmt.Printf("Overriding `prefix` in config file")
 		}
 		cfg.VersionPrefix = c.String("version-prefix")
-	} else if len(c.StringSlice("npm-prefix")) > 0 {
+	}
+	if len(c.StringSlice("npm-prefix")) > 0 {
 		if !configCreated {
 			fmt.Printf("Overriding `npmPrefix` in config file")
 		}
@@ -98,7 +98,7 @@ func initAction(c *cli.Context) (err error) {
 	}
 
 	v := version.Version{}
-	tag, err := git.GetLatestTag(cfg.NoFetch)
+	tag, err := cfg.Git.GetLatestTag(cfg.NoFetch)
 	if err != nil {
 		v = version.New()
 	} else {
@@ -112,7 +112,7 @@ func initAction(c *cli.Context) (err error) {
 	}
 
 	if c.Bool("persist") {
-		if err = git.CommitFiles(
+		if err = cfg.Git.CommitFiles(
 			[]string{
 				filepath.Join(".", config.Filename),
 				versionFile,

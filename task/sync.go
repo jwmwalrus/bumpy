@@ -3,7 +3,6 @@ package task
 import (
 	"fmt"
 
-	"github.com/jwmwalrus/bnp/git"
 	"github.com/jwmwalrus/bumpy/internal/config"
 	"github.com/jwmwalrus/bumpy/version"
 	"github.com/urfave/cli/v2"
@@ -27,15 +26,13 @@ func Sync() *cli.Command {
 }
 
 func syncAction(c *cli.Context) (err error) {
-	var cfg config.Config
-	restoreCwd, err := cfg.Load()
+	cfg, err := config.Load()
 	if err != nil {
 		return
 	}
-	defer restoreCwd()
 
 	tag := ""
-	if tag, err = git.GetLatestTag(cfg.NoFetch); err != nil {
+	if tag, err = cfg.Git.GetLatestTag(cfg.NoFetch); err != nil {
 		return
 	}
 

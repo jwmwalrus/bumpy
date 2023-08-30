@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"github.com/jwmwalrus/bnp/git"
 	"github.com/jwmwalrus/bumpy/internal/config"
 	"github.com/urfave/cli/v2"
 )
@@ -65,28 +64,34 @@ func Config() *cli.Command {
 }
 
 func configAction(c *cli.Context) (err error) {
-	var cfg config.Config
-	restoreCwd, err := cfg.Load()
+	cfg, err := config.Load()
 	if err != nil {
 		return
 	}
-	defer restoreCwd()
 
 	if c.Bool("no-fetch") {
 		cfg.NoFetch = true
 	} else if c.Bool("fetch") {
 		cfg.NoFetch = false
-	} else if c.Bool("no-commit") {
+	}
+
+	if c.Bool("no-commit") {
 		cfg.NoCommit = true
 	} else if c.Bool("commit") {
 		cfg.NoCommit = false
-	} else if c.String("version-prefix") != "" {
+	}
+
+	if c.String("version-prefix") != "" {
 		cfg.VersionPrefix = c.String("version-prefix")
-	} else if len(c.StringSlice("add-npm-prefix")) > 0 {
+	}
+
+	if len(c.StringSlice("add-npm-prefix")) > 0 {
 		for _, p := range c.StringSlice("add-npm-prefix") {
 			cfg.NPMPrefixes = append(cfg.NPMPrefixes, p)
 		}
-	} else if len(c.StringSlice("remove-npm-prefix")) > 0 {
+	}
+
+	if len(c.StringSlice("remove-npm-prefix")) > 0 {
 		newSlice := []string{}
 		// TODO: optimize loop
 	outerLoop:
@@ -99,7 +104,9 @@ func configAction(c *cli.Context) (err error) {
 			newSlice = append(newSlice, v)
 		}
 		cfg.NPMPrefixes = newSlice
-	} else if c.Bool("clear-npm-prefixes") {
+	}
+
+	if c.Bool("clear-npm-prefixes") {
 		cfg.NPMPrefixes = []string{}
 	}
 
@@ -113,7 +120,7 @@ func configAction(c *cli.Context) (err error) {
 	}
 
 	if c.Bool("persist") {
-		if err = git.CommitFiles(
+		if err = cfg.Git.CommitFiles(
 			[]string{filepath.Join(".", config.Filename)},
 			"Update version config",
 		); err != nil {

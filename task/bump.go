@@ -6,7 +6,6 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	"github.com/jwmwalrus/bnp/git"
 	"github.com/jwmwalrus/bumpy/internal/config"
 	"github.com/jwmwalrus/bumpy/version"
 	"github.com/urfave/cli/v2"
@@ -56,12 +55,10 @@ func Bump() *cli.Command {
 }
 
 func bumpAction(c *cli.Context) (err error) {
-	var cfg config.Config
-	restoreCwd, err := cfg.Load()
+	cfg, err := config.Load()
 	if err != nil {
 		return
 	}
-	defer restoreCwd()
 
 	var v version.Version
 	if err = v.LoadFrom(cfg.VersionPrefix); err != nil {
@@ -124,7 +121,7 @@ func bumpAction(c *cli.Context) (err error) {
 	}
 
 	if !cfg.NoCommit {
-		if err = git.CommitFiles(slist, "Bump version"); err != nil {
+		if err = cfg.Git.CommitFiles(slist, "Bump version"); err != nil {
 			return
 		}
 	}
@@ -134,12 +131,10 @@ func bumpAction(c *cli.Context) (err error) {
 }
 
 func checkVersionInSync(c *cli.Context) (err error) {
-	var cfg config.Config
-	restoreCwd, err := cfg.Load()
+	cfg, err := config.Load()
 	if err != nil {
 		return
 	}
-	defer restoreCwd()
 
 	var vFromFile version.Version
 	var tag string
@@ -148,7 +143,7 @@ func checkVersionInSync(c *cli.Context) (err error) {
 		return
 	}
 
-	if tag, err = git.GetLatestTag(cfg.NoFetch); err != nil {
+	if tag, err = cfg.Git.GetLatestTag(cfg.NoFetch); err != nil {
 		fmt.Printf("WARNING, unable to obtain latest tag: %v\n", err)
 		err = nil
 		return

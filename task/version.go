@@ -38,12 +38,10 @@ func Version() *cli.Command {
 }
 
 func versionAction(c *cli.Context) (err error) {
-	var cfg config.Config
-	restoreCwd, err := cfg.Load()
+	cfg, err := config.Load()
 	if err != nil {
 		return
 	}
-	defer restoreCwd()
 
 	v := version.Version{}
 	if err = v.LoadFrom(cfg.VersionPrefix); err != nil {

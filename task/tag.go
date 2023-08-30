@@ -7,7 +7,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/jwmwalrus/bnp/git"
 	"github.com/jwmwalrus/bumpy/internal/config"
 	"github.com/jwmwalrus/bumpy/version"
 	"github.com/russross/blackfriday/v2"
@@ -42,12 +41,10 @@ func Tag() *cli.Command {
 }
 
 func tagAction(c *cli.Context) (err error) {
-	var cfg config.Config
-	restoreCwd, err := cfg.Load()
+	cfg, err := config.Load()
 	if err != nil {
 		return
 	}
-	defer restoreCwd()
 
 	fmt.Printf("\nLoading current version file...\n")
 	v := version.Version{}
@@ -70,7 +67,7 @@ func tagAction(c *cli.Context) (err error) {
 		msg = getChangeLogMessage(v, filename)
 		msg = strings.TrimSuffix(msg, "\n")
 
-		if err = git.CommitFiles([]string{filename}, "Update ChangeLog"); err != nil {
+		if err = cfg.Git.CommitFiles([]string{filename}, "Update ChangeLog"); err != nil {
 			return
 		}
 	}
@@ -79,7 +76,7 @@ func tagAction(c *cli.Context) (err error) {
 		msg = "New version"
 	}
 
-	if err = git.CreateTag(v.String(), msg); err != nil {
+	if err = cfg.Git.CreateTag(v.String(), msg); err != nil {
 		return
 	}
 
