@@ -67,7 +67,9 @@ func tagAction(c *cli.Context) (err error) {
 		msg = getChangeLogMessage(v, filename)
 		msg = strings.TrimSuffix(msg, "\n")
 
-		if err = cfg.Git.CommitFiles([]string{filename}, "Update ChangeLog"); err != nil {
+		fmt.Printf("\nCommiting ChangeLog file...\n")
+		err = cfg.Git.CommitFiles([]string{filename}, "Update ChangeLog")
+		if err != nil {
 			return
 		}
 	}
@@ -76,7 +78,9 @@ func tagAction(c *cli.Context) (err error) {
 		msg = "New version"
 	}
 
-	if err = cfg.Git.NewTag(v.String(), msg); err != nil {
+	fmt.Printf("\nCreating annotated tag with `%s` as message\n", msg)
+	err = cfg.Git.NewTag(v.String(), msg)
+	if err != nil {
 		return
 	}
 

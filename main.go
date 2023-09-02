@@ -3,6 +3,7 @@ package main
 import (
 	_ "embed"
 	"fmt"
+	"log/slog"
 	"os"
 	"time"
 
@@ -16,7 +17,12 @@ var versionJSON []byte
 
 var appVersion version.Version
 
+var logger *slog.Logger
+
 func main() {
+	logger := slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelError}))
+	slog.SetDefault(logger)
+
 	app := &cli.App{
 		Name:      "bumpy-ride",
 		Version:   appVersion.String(),

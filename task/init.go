@@ -112,13 +112,15 @@ func initAction(c *cli.Context) (err error) {
 	}
 
 	if c.Bool("persist") {
-		if err = cfg.Git.CommitFiles(
+		fmt.Printf("\nCommiting files...\n")
+		err = cfg.Git.CommitFiles(
 			[]string{
 				filepath.Join(".", config.Filename),
 				versionFile,
 			},
 			"Init version",
-		); err != nil {
+		)
+		if err != nil {
 			return
 		}
 	}

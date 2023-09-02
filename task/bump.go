@@ -68,25 +68,30 @@ func bumpAction(c *cli.Context) (err error) {
 	rest := c.Args().Slice()
 
 	if c.Bool("major") {
+		fmt.Printf("\nBumping `major`...\n")
 		v.Major = v.Major + 1
 		v.Minor = 0
 		v.Patch = 0
 		v.Pre = ""
 		v.Build = ""
 	} else if c.Bool("minor") {
+		fmt.Printf("\nBumping `minor`...\n")
 		v.Minor = v.Minor + 1
 		v.Patch = 0
 		v.Pre = ""
 		v.Build = ""
 	} else if c.Bool("patch") {
+		fmt.Printf("\nBumping `patch`...\n")
 		v.Patch = v.Patch + 1
 		v.Pre = ""
 		v.Build = ""
 	} else {
 		if len(rest) > 1 {
 			err = errors.New("Too many options provided")
+			return
 
 		} else if len(rest) == 1 {
+			fmt.Printf("\nBumping to custom version: %s...\n", rest[0])
 			if err = v.Parse(rest[0]); err != nil {
 				return
 			}
@@ -94,9 +99,11 @@ func bumpAction(c *cli.Context) (err error) {
 	}
 
 	if c.String("pre") != "" {
+		fmt.Printf("\nAdding `pre`: %s...\n", c.String("pre"))
 		v.Pre = c.String("pre")
 	}
 	if c.String("build") != "" {
+		fmt.Printf("\nAdding `build`: %s...\n", c.String("build"))
 		v.Build = c.String("build")
 	}
 
@@ -121,6 +128,8 @@ func bumpAction(c *cli.Context) (err error) {
 	}
 
 	if !cfg.NoCommit {
+		fmt.Printf("\nCommiting files...\n")
+
 		if err = cfg.Git.CommitFiles(slist, "Bump version"); err != nil {
 			return
 		}
