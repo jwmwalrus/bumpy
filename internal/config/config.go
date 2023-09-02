@@ -18,11 +18,11 @@ const (
 
 // Config defines the bumpy-ride configuration file
 type Config struct {
-	NoFetch       bool          `json:"noFetch"`
-	NoCommit      bool          `json:"noCommit"`
-	VersionPrefix string        `json:"versionPrefix"`
-	NPMPrefixes   []string      `json:"npmPrefixes"`
-	Git           git.Interface `json:"-"`
+	NoFetch       bool        `json:"noFetch"`
+	NoCommit      bool        `json:"noCommit"`
+	VersionPrefix string      `json:"versionPrefix"`
+	NPMPrefixes   []string    `json:"npmPrefixes"`
+	Git           git.Handler `json:"-"`
 }
 
 // New returns an initial Config
@@ -102,7 +102,7 @@ func (cfg *Config) Save() (err error) {
 func (cfg *Config) gitLoad() {
 	cwd, _ := os.Getwd()
 	var err error
-	cfg.Git, err = git.NewInterface(cwd)
+	cfg.Git, err = git.NewHandler(cwd)
 	onerror.Fatal(err)
 }
 

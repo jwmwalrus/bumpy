@@ -76,7 +76,7 @@ func tagAction(c *cli.Context) (err error) {
 		msg = "New version"
 	}
 
-	if err = cfg.Git.CreateTag(v.String(), msg); err != nil {
+	if err = cfg.Git.NewTag(v.String(), msg); err != nil {
 		return
 	}
 
