@@ -1,0 +1,32 @@
+# https://taskfile.dev
+
+---
+version: '3'
+
+vars:
+  RACE_FLAG: ''
+
+tasks:
+  build:
+    desc: Build for production
+    deps: [clean]
+    cmds:
+      - >
+        go build -v -ldflags='-s -w' -gcflags=-l -trimpath
+        -o ./bumpy{{exeExt}} .
+  install:
+    desc: Install to GOPATH
+    cmds:
+      - go install
+  dev:
+    desc: Build for development
+    cmds:
+      - go build -v -o ./bumpy{{exeExt}} .
+
+  clean:
+    desc: Clean, remove output files
+    cmds:
+      - rm bumpy > /dev/null 2>&1
+    status:
+      - test ! -f ./bumpy
+    silent: true
