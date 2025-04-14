@@ -1,6 +1,7 @@
 package task
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"os"
@@ -8,10 +9,10 @@ import (
 
 	"github.com/jwmwalrus/bumpy/internal/config"
 	"github.com/jwmwalrus/bumpy/version"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
-// Init creates an initial version file
+// Init creates an initial version file.
 func Init() *cli.Command {
 	return &cli.Command{
 		Name:            "init",
@@ -22,7 +23,6 @@ func Init() *cli.Command {
 		SkipFlagParsing: false,
 		HideHelp:        false,
 		Hidden:          false,
-		HelpName:        "init",
 		Action:          initAction,
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
@@ -49,7 +49,7 @@ func Init() *cli.Command {
 	}
 }
 
-func initAction(c *cli.Context) (err error) {
+func initAction(ctx context.Context, c *cli.Command) (err error) {
 	cfg, configCreated, err := config.LoadOrCreate()
 	if err != nil {
 		return
@@ -112,7 +112,7 @@ func initAction(c *cli.Context) (err error) {
 	}
 
 	if c.Bool("persist") {
-		fmt.Printf("\nCommiting files...\n")
+		fmt.Printf("\nCommitting files...\n")
 		err = cfg.Git.CommitFiles(
 			[]string{
 				filepath.Join(".", config.Filename),

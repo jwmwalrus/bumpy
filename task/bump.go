@@ -1,6 +1,7 @@
 package task
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"os/exec"
@@ -8,10 +9,10 @@ import (
 
 	"github.com/jwmwalrus/bumpy/internal/config"
 	"github.com/jwmwalrus/bumpy/version"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
-// Bump bumps version
+// Bump bumps version.
 func Bump() *cli.Command {
 	return &cli.Command{
 		Name:            "bump",
@@ -23,7 +24,6 @@ func Bump() *cli.Command {
 		SkipFlagParsing: false,
 		HideHelp:        false,
 		Hidden:          false,
-		HelpName:        "bump",
 		Before:          checkVersionInSync,
 		Action:          bumpAction,
 		Flags: []cli.Flag{
@@ -54,7 +54,7 @@ func Bump() *cli.Command {
 	}
 }
 
-func bumpAction(c *cli.Context) (err error) {
+func bumpAction(ctx context.Context, c *cli.Command) (err error) {
 	cfg, err := config.Load()
 	if err != nil {
 		return
@@ -128,7 +128,7 @@ func bumpAction(c *cli.Context) (err error) {
 	}
 
 	if !cfg.NoCommit {
-		fmt.Printf("\nCommiting files...\n")
+		fmt.Printf("\nCommitting files...\n")
 
 		if err = cfg.Git.CommitFiles(slist, "Bump version"); err != nil {
 			return
@@ -139,35 +139,37 @@ func bumpAction(c *cli.Context) (err error) {
 	return
 }
 
-func checkVersionInSync(c *cli.Context) (err error) {
+func checkVersionInSync(ctx context.Context, c *cli.Command) (context.Context, error) {
+	var err error
+
 	cfg, err := config.Load()
 	if err != nil {
-		return
+		return ctx, err
 	}
 
 	var vFromFile version.Version
 	var tag string
 
 	if err = vFromFile.LoadFrom(cfg.VersionPrefix); err != nil {
-		return
+		return ctx, err
 	}
 
 	if tag, err = cfg.Git.LatestTag(cfg.NoFetch); err != nil {
 		fmt.Printf("WARNING, unable to obtain latest tag: %v\n", err)
 		err = nil
-		return
+		return ctx, err
 	}
 
 	var ok bool
 	if ok, err = vFromFile.EqualsString(tag); err != nil || !ok {
-		return
+		return ctx, err
 	}
 
 	if !ok {
 		err = errors.New("Version in file does not match latest tag. Please sync")
 	}
 
-	return
+	return ctx, err
 }
 
 func updatePackageJSON(prefix string, v version.Version) (files []string, err error) {

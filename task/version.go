@@ -1,14 +1,15 @@
 package task
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/jwmwalrus/bumpy/internal/config"
 	"github.com/jwmwalrus/bumpy/version"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
-// Version displays the project version
+// Version displays the project version.
 func Version() *cli.Command {
 	return &cli.Command{
 		Name:            "version",
@@ -20,7 +21,6 @@ func Version() *cli.Command {
 		SkipFlagParsing: false,
 		HideHelp:        false,
 		Hidden:          false,
-		HelpName:        "version",
 		Action:          versionAction,
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
@@ -37,7 +37,7 @@ func Version() *cli.Command {
 	}
 }
 
-func versionAction(c *cli.Context) (err error) {
+func versionAction(ctx context.Context, c *cli.Command) (err error) {
 	cfg, err := config.Load()
 	if err != nil {
 		return

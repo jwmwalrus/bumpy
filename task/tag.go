@@ -1,6 +1,7 @@
 package task
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -10,10 +11,10 @@ import (
 	"github.com/jwmwalrus/bumpy/internal/config"
 	"github.com/jwmwalrus/bumpy/version"
 	"github.com/russross/blackfriday/v2"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
-// Tag commits the ChangeLog and adds a tag to it
+// Tag commits the ChangeLog and adds a tag to it.
 func Tag() *cli.Command {
 	return &cli.Command{
 		Name:            "tag",
@@ -25,7 +26,6 @@ func Tag() *cli.Command {
 		SkipFlagParsing: false,
 		HideHelp:        false,
 		Hidden:          false,
-		HelpName:        "tag",
 		Action:          tagAction,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
@@ -40,7 +40,7 @@ func Tag() *cli.Command {
 	}
 }
 
-func tagAction(c *cli.Context) (err error) {
+func tagAction(ctx context.Context, c *cli.Command) (err error) {
 	cfg, err := config.Load()
 	if err != nil {
 		return
@@ -67,7 +67,7 @@ func tagAction(c *cli.Context) (err error) {
 		msg = getChangeLogMessage(v, filename)
 		msg = strings.TrimSuffix(msg, "\n")
 
-		fmt.Printf("\nCommiting ChangeLog file...\n")
+		fmt.Printf("\nCommitting ChangeLog file...\n")
 		err = cfg.Git.CommitFiles([]string{filename}, "Update ChangeLog")
 		if err != nil {
 			return

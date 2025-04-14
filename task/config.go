@@ -1,14 +1,15 @@
 package task
 
 import (
+	"context"
 	"fmt"
 	"path/filepath"
 
 	"github.com/jwmwalrus/bumpy/internal/config"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
-// Config modifies the version config file
+// Config modifies the version config file.
 func Config() *cli.Command {
 	return &cli.Command{
 		Name:            "config",
@@ -20,7 +21,6 @@ func Config() *cli.Command {
 		SkipFlagParsing: false,
 		HideHelp:        false,
 		Hidden:          false,
-		HelpName:        "config",
 		Action:          configAction,
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
@@ -63,7 +63,7 @@ func Config() *cli.Command {
 	}
 }
 
-func configAction(c *cli.Context) (err error) {
+func configAction(ctx context.Context, c *cli.Command) (err error) {
 	cfg, err := config.Load()
 	if err != nil {
 		return

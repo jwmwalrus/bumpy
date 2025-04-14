@@ -1,15 +1,15 @@
 package main
 
 import (
+	"context"
 	_ "embed"
 	"fmt"
 	"log/slog"
 	"os"
-	"time"
 
 	"github.com/jwmwalrus/bumpy/task"
 	"github.com/jwmwalrus/bumpy/version"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 //go:embed version.json
@@ -23,17 +23,15 @@ func main() {
 	logger := slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelError}))
 	slog.SetDefault(logger)
 
-	app := &cli.App{
+	app := &cli.Command{
 		Name:      "bumpy-ride",
 		Version:   appVersion.String(),
-		Compiled:  time.Now(),
 		Copyright: "(c) 2022 WalrusAhead Solutions",
-		HelpName:  "bumpy",
 		Usage:     "A versioning tool",
 		UsageText: "bumpy [command] [options ...]",
-		ExitErrHandler: func(c *cli.Context, err error) {
+		ExitErrHandler: func(ctx context.Context, c *cli.Command, err error) {
 			if err != nil {
-				fmt.Fprintf(c.App.ErrWriter, err.Error()+"\n")
+				fmt.Fprintf(c.ErrWriter, err.Error()+"\n")
 			}
 		},
 		Commands: []*cli.Command{
@@ -46,7 +44,7 @@ func main() {
 		},
 	}
 
-	app.Run(os.Args)
+	app.Run(context.Background(), os.Args)
 }
 
 func init() {
