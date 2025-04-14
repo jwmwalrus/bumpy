@@ -9,6 +9,18 @@ This project uses [semantic versions](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.59.0] 2025-04-14
+
+Upgrade urfave/cli
+
+## Added
+
+* Add Taskfile
+
+## Updated
+
+* Upgrade urfave/cli
+
 ## [0.58.3] 2023-09-02
 
 Update git interface
