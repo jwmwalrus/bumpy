@@ -9,6 +9,10 @@ This project uses [semantic versions](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.60.0] 2025-06-08
+
+Add --no-prefix flag
+
 ## [0.59.0] 2025-04-14
 
 Upgrade urfave/cli
