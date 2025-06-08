@@ -33,6 +33,10 @@ func Version() *cli.Command {
 				Aliases: []string{"l"},
 				Usage:   "Long, detailed version",
 			},
+			&cli.BoolFlag{
+				Name:  "no-prefix",
+				Usage: "Remove v from the beginning of the version string",
+			},
 		},
 	}
 }
@@ -49,7 +53,11 @@ func versionAction(ctx context.Context, c *cli.Command) (err error) {
 	}
 
 	if c.Bool("short") {
-		fmt.Printf("%v\n", v.String())
+		str := v.String()
+		if c.Bool("no-prefix") {
+			str = str[1:]
+		}
+		fmt.Printf("%v\n", str)
 	} else if c.Bool("long") {
 		extra := ""
 		if v.Pre != "" {
@@ -61,7 +69,11 @@ func versionAction(ctx context.Context, c *cli.Command) (err error) {
 
 		fmt.Printf("\nVersion: %v\n\tMajor: %v\n\tMinor: %v\n\tPatch: %v%v\n", v.String(), v.Major, v.Minor, v.Patch, extra)
 	} else {
-		fmt.Printf("\nVersion: %v\n", v.String())
+		str := v.String()
+		if c.Bool("no-prefix") {
+			str = str[1:]
+		}
+		fmt.Printf("\nVersion: %v\n", str)
 	}
 
 	return
